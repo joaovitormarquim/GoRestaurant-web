@@ -18,25 +18,22 @@ interface IProps {
   food: IFoodPlate;
   handleDelete: (id: number) => {};
   handleEditFood: (food: IFoodPlate) => void;
-  setIsOpen: () => void;
 }
 
 const Food: React.FC<IProps> = ({
   food,
   handleDelete,
   handleEditFood,
-  setIsOpen,
 }: IProps) => {
   const [isAvailable, setIsAvailable] = useState(food.available);
 
   async function toggleAvailable(): Promise<void> {
     try {
-      const response = await api.put(`/foods/${food.id}`, {
+      await api.put(`/foods/${food.id}`, {
         ...food,
-        available: !food.available,
+        available: !isAvailable,
       });
-      setIsAvailable(!food.available);
-      handleEditFood(response.data);
+      setIsAvailable(!isAvailable);
     } catch (error) {
       console.log(error);
     }
@@ -44,7 +41,6 @@ const Food: React.FC<IProps> = ({
 
   function setEditingFood(): void {
     handleEditFood(food);
-    setIsOpen();
   }
 
   return (
